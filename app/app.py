@@ -1,4 +1,5 @@
 from fastapi import FastAPI,HTTPException
+from .schemas import NewPost,ResponsePost
 
 app = FastAPI()
 
@@ -20,12 +21,8 @@ text_posts = {
     15:{"title":"Importance of Clean Code","content":"Clean code is easy to read, understand, test, and maintain. Writing simple and organized code makes collaboration and future development easier."}
 }
 
-# @app.get("/post")
-def get_all_post():
-    return text_posts
-
 @app.get("/posts/{id}")
-def get_int_post(id:int):
+def get_int_post(id:int)->ResponsePost:
     if id not in text_posts:
         raise HTTPException(status_code=404,detail="Post Not Found")
     return text_posts.get(id)
@@ -35,3 +32,18 @@ def get_query(limit :int = None):
     if limit:
         return list(text_posts.values())[:limit]
     return text_posts
+
+@app.post("/posts")
+def new_post(post:NewPost)->ResponsePost:
+    new_post = {
+        "title" : post.title,
+        "content" : post.content
+    }
+    text_posts[max(text_posts.keys())+1] = new_post
+    return new_post
+
+@app.delete("/posts")
+def delete_post(num:int)->ResponsePost:
+    deleted_post = text_posts[num]
+    del text_posts[num]
+    return deleted_post
