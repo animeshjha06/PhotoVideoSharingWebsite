@@ -20,12 +20,18 @@ text_posts = {
     15:{"title":"Importance of Clean Code","content":"Clean code is easy to read, understand, test, and maintain. Writing simple and organized code makes collaboration and future development easier."}
 }
 
-@app.get("/post")
+# @app.get("/post")
 def get_all_post():
     return text_posts
 
-@app.get("/post/{id}")
+@app.get("/posts/{id}")
 def get_int_post(id:int):
     if id not in text_posts:
         raise HTTPException(status_code=404,detail="Post Not Found")
     return text_posts.get(id)
+
+@app.get("/posts")
+def get_query(limit :int = None):
+    if limit:
+        return list(text_posts.values())[:limit]
+    return text_posts
