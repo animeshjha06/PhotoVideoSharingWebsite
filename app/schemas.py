@@ -1,17 +1,6 @@
 from pydantic import BaseModel
 from fastapi_users import schemas
-import uuid
-
-
-class NewPost(BaseModel):
-    title: str
-    content: str
-
-
-class ResponsePost(BaseModel):
-    title: str
-    content: str
-
+import uuid 
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
     pass
